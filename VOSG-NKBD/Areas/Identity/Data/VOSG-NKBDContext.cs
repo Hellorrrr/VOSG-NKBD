@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VOSG_NKBD.Models;
 
 namespace VOSG_NKBD.Data;
 
@@ -18,4 +19,6 @@ public class VOSG_NKBDContext : IdentityDbContext<IdentityUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+public DbSet<VOSG_NKBD.Models.Movie> Movie { get; set; } = default!;
 }
