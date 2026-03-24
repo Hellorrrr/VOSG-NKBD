@@ -23,7 +23,7 @@ namespace VOSG_NKBD.Models
 
         [Required(ErrorMessage = "Enter your place")]
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public Time Date { get; set; }
 
         [Required(ErrorMessage = "Enter your time")]
         [DataType(DataType.Time)]
@@ -31,7 +31,7 @@ namespace VOSG_NKBD.Models
 
         [Required(ErrorMessage = "Enter your end time")]
         [DataType(DataType.Time)]
-        public DateTime EndTime { get; set; }
+        public StartTime EndTime { get; set; }
 
         [Required(ErrorMessage = "End time must be later than start time.")]
         public decimal TotalPrice { get; set; }

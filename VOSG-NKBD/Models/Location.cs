@@ -16,11 +16,11 @@ namespace VOSG_NKBD.Models
         [Display(Name = "Address")]
         public string Addresss { get; set; }
 
-        [Required, MinLength(2), MaxLength(20), RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "Suburb must only contain letters, numbers or spaces.")]
+        [Required, MinLength(2), MaxLength(20), RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "Suburb must only contain letters or spaces.")]
         [Display(Name = "Suburb")]
         public string Suburb { get; set; }
 
-        [Required, MinLength(2), MaxLength(20), RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "City must only contain letters, numbers or spaces.")]
+        [Required, MinLength(2), MaxLength(20), RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "City must only contain letters or spaces.")]
         [Display(Name = "City")]
         public string City { get; set; }
 
