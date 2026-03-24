@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGenerators.Mvc" Version="10.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\SQL\" />
+  </ItemGroup>
+
 </Project>

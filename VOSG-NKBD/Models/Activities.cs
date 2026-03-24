@@ -13,7 +13,7 @@ namespace VOSG_NKBD.Models
         public int MemberID { get; set; }
 
         [ForeignKey("UserID"), Required]
-        public string VOSG_NKBDUserId { get; set; }
+        public string VOSGNKBDUserId { get; set; }
 
         [Required(ErrorMessage = "Select your activity")]
   
