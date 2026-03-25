@@ -22,6 +22,6 @@ namespace VOSG_NKBD.Models
         [Required]
         public string PaymentStatus { get; set; }
 
-        public Payment? Payment { get; set; }
+        public Payments? Payment { get; set; }
     }
 }

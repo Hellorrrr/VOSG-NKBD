@@ -13,7 +13,7 @@ namespace VOSG_NKBD.Models
         public int MemberID { get; set; }
 
         [ForeignKey("UserID"), Required]
-        public string VOSGNKBDUserId { get; set; }
+        public string VOSG_NKBDUserId { get; set; }
 
         [Required(ErrorMessage = "Select your activity")]
   
@@ -23,15 +23,11 @@ namespace VOSG_NKBD.Models
 
         [Required(ErrorMessage = "Enter your place")]
         [DataType(DataType.Date)]
-        public Time Date { get; set; }
-
-        [Required(ErrorMessage = "Enter your time")]
-        [DataType(DataType.Time)]
         public DateTime StartTime { get; set; }
 
         [Required(ErrorMessage = "Enter your end time")]
         [DataType(DataType.Time)]
-        public StartTime EndTime { get; set; }
+        public DateTime EndTime { get; set; }
 
         [Required(ErrorMessage = "End time must be later than start time.")]
         public decimal TotalPrice { get; set; }
