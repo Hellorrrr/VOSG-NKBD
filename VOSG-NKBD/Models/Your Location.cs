@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 using VOSG_NKBD.Models;
 
 namespace VOSG_NKBD.Models
 {
-    public class Location
+    public class Your Location
     {
         [Key]
         public int CountryID { get; set; }
