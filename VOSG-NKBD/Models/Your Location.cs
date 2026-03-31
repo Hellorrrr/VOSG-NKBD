@@ -4,7 +4,7 @@ using VOSG_NKBD.Models;
 
 namespace VOSG_NKBD.Models
 {
-    public class Your Location
+    public class Location
     {
         [Key]
         public int CountryID { get; set; }

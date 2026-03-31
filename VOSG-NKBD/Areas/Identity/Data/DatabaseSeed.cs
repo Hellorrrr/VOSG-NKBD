@@ -1,19 +1,14 @@
-﻿using VOSG_NKBD.Areas.Identity.Data;
-using VOSG_NKBD.Models;
-using Microsoft.AspNetCore.Builder;
+﻿using VOSG_NKBD.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using VOSG_NKBD.Models;
+using VOSG_NKBD.Data;
 
-namespace VOSG_NKBD.Data
+namespace VOSG_NKBD.Areas.Identity.Data
 {
     public static class DatabaseSeed
     {
         private static object place;
+
+        public static object Confirmation { get; private set; }
 
         public static async Task SeedDataAsync(IApplicationBuilder app)
         {
@@ -22,70 +17,64 @@ namespace VOSG_NKBD.Data
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
 
             // Ensure database is created
-            context.Database.EnsureCreated();
+            object value = context.Database.EnsureCreated();
 
             // Prevent duplicate seeding
-            if (context.Locations.Any() || context.Activites.Any() || context.Place.Any() || context.Payments.Any())
-                return;
-
-            // Seed Locations
-            var locations = new Location[]
+            if (!(context.Locations.Any() || context.Activites.Any() || context.Place.Any() || context.Payments.Any()))
             {
+                // Seed Locations
+                var locations = new Location[]
+                {
                 new Location { LocationName = "Auckland Showgrounds", Addresss = "217 Green Lane West", Suburb = "Epsom", City = "Auckland", Country = "New Zealand", PostalCode = "1051", PhoneNumber = "+64 9-623-0092" },
                 new Location { LocationName = "Nathan Phillips Square", Addresss = "100 Queen Street West", Suburb = "Central", City = "Toronto", Country = "Canada", PostalCode = "M5H 2N2", PhoneNumber = "+1 416-392-2489" },
                 new Location { LocationName = "Dr. Phillips Center for the Performing Arts", Addresss = "445 South Magnolia Avenue", Suburb = "Central", City = "Orlando", Country = "The USA", PostalCode = "FL 32801", PhoneNumber = "+1 407-358-6603" },
                 new Location { LocationName = "Federation Square", Addresss = "Swanston Street & Flinders Street", Suburb = "Central", City = "Melbourne", Country = "Australia", PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
-                new Location { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
-            };
-            context.Locations.AddRange(locations);
-            await context.SaveChangesAsync();
+                new() { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
+                };
+                Context.Locations.AddRange(locations);
+                await context.SaveChangesAsync();
 
-            // Seed Users via UserManager
-            var usersToCreate = new (string FirstName, string LastName, string Email, string Phone)[]
-            {
-                ("John", "Doe", "JohnDoe@gmail.com", "+64-02-783-21892"),
-                ("Jane", "Doe", "JaneDoe@gmail.com", "+1-416-123-4567"),
-                ("Alice", "Smith", "AliceSmith@gmail.com", "+1-407-123-4567"),
-                ("Bob", "Brown", "BobBrown@gmail.com", "+61-412-345-678"),
-                ("Emma", "Taylor", "EmmaTaylor@gmail.com", "+358-41-123-4567")
-            };
-
-            var createdUsers = new List<VOSG_NKBDUser>();
-
-            foreach (var u in usersToCreate)
-            {
-                var existingUser = await userManager.FindByEmailAsync(u.Email);
-                if (existingUser == null)
+                // Seed Users via UserManager
+                var usersToCreate = new (string FirstName, string LastName, string Email, string Phone)[]
                 {
-                    var user = new VOSG_NKBDUser
+                ("Nicolas", "Jackson", "NicolasJackson@gmail.com", "+64-02-783-21892"),
+                ("Jenny", "Monroe", "JennyMonroe@gmail.com", "+1-416-123-4567"),
+                ("Alice", "Sydney", "AliceSydney@gmail.com", "+1-407-123-4567"),
+                ("Bobby", "Gordon", "BobbyGordon@gmail.com", "+61-412-345-678"),
+                ("Emma", "Hathaway", "EmmaHathaway@gmail.com", "+358-41-123-4567")
+                };
+
+                var createdUsers = new List<VOSG_NKBDUser>();
+
+                foreach (var u in usersToCreate)
+                {
+                    var existingUser = await userManager.FindByEmailAsync(u.Email);
+                    if (existingUser == null)
                     {
-                        UserName = u.Email,
-                        Email = u.Email,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName,
-                        Phone = u.Phone
-                    };
-                    var result = await userManager.CreateAsync(user, "DefaultPassword123!");
-                    if (result.Succeeded)
+                        var user = new VOSG_NKBDUser
+                        {
+                            UserName = u.Email,
+                            Email = u.Email,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Phone = u.Phone
+                        };
+                        var result = await userManager.CreateAsync(user, "DefaultPassword456!");
+                        if (result.Succeeded)
+                        {
+                            createdUsers.Add(user);
+                        }
+                    }
+                    else
                     {
-                        createdUsers.Add(user);
+                        createdUsers.Add(existingUser);
                     }
                 }
-                else
+                var confirmation = new Confirmation[]
                 {
-                    createdUsers.Add(existingUser);
-                }
-            }
-            var confirmation = new Confirmation[]
-            {
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[0].Id,
-                    PlaceID = place[0].PlaceID,
-                    ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 10, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 10, 10, 0, 0),
-                    TotalPrice = place[0].Price
+                    VOSG_NKBDId = createdUsers[0].Id, PlaceID = place[0].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 10, 9, 0, 0), EndTime = new DateTime(2026, 9, 10, 10, 0, 0), TotalPrice = place[0].Price
                 },
                 new Confirmation
                 {
@@ -116,28 +105,24 @@ namespace VOSG_NKBD.Data
                 },
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[4].Id,
-                    PlaceID = place[4].PlaceID,
-                    ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 19, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 18, 10, 0, 0),
-                    TotalPrice = place[4].Price
+                    VOSG_NKBDId = createdUsers[4].Id, PlaceID = place[4].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 19, 9, 0, 0), EndTime = new DateTime(2026, 9, 18, 10, 0, 0), TotalPrice = place[4].Price
                 }
-            };
-            context.Confirmation);
-            await context.SaveChangesAsync();
+                };
+                object confirmation = context.Confirmation; ;
+                await context.SaveChangesAsync();
 
-            // Seed Payments
-            var payments = new Payment[]
-            {
-                new Payment { Confirmookings[0].BookingID, PaymentAmount = bookings[0].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { BookingID = bookings[1].BookingID, PaymentAmount = bookings[1].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { BookingID = bookings[2].BookingID, PaymentAmount = bookings[2].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { BookingID = bookings[3].BookingID, PaymentAmount = bookings[3].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { BookingID = bookings[4].BookingID, PaymentAmount = bookings[4].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" }
-            };
-            context.Payments.AddRange(payments);
-            await context.SaveChangesAsync();
+                // Seed Payments
+                var payments = new Payment[]
+                {
+                new(){ Confirmation[0].VOSG_NKBDId, PaymentAmount = confirmation[0].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[1].VOSG_NKBDId, PaymentAmount = confirmation[1].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[2].VOSG_NKBDId, PaymentAmount = confirmation[2].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[3].VOSG_NKBDId, PaymentAmount = confirmation[3].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[4].VOSG_NKBDId, PaymentAmount = confirmation[4].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" }
+                };
+                context.Payments.AddRange(payments);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
