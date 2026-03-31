@@ -2,7 +2,7 @@
 {
     internal class Confirmation
     {
-        public object VOSG_NKBDId { get; set; }
+        public object MemberId { get; set; }
         public object PlaceID { get; set; }
         public DateTime ConfirmationDate { get; set; }
         public DateTime StartTime { get; set; }

@@ -1,6 +1,8 @@
-﻿using VOSG_NKBD.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Build.Evaluation.Context;
 using VOSG_NKBD.Data;
+using VOSG_NKBD.Models;
+using Location = VOSG_NKBD.Data.Location;
 
 namespace VOSG_NKBD.Areas.Identity.Data
 {
@@ -20,7 +22,10 @@ namespace VOSG_NKBD.Areas.Identity.Data
             object value = context.Database.EnsureCreated();
 
             // Prevent duplicate seeding
-            if (!(context.Locations.Any() || context.Activites.Any() || context.Place.Any() || context.Payments.Any()))
+            if (!context.Locations.Any()
+                 context.Activites.Any()
+                  | context.Place.Any()
+                  | context.Payments.Any())
             {
                 // Seed Locations
                 var locations = new Location[]
@@ -31,7 +36,7 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 new Location { LocationName = "Federation Square", Addresss = "Swanston Street & Flinders Street", Suburb = "Central", City = "Melbourne", Country = "Australia", PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
                 new() { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
                 };
-                Context.Locations.AddRange(locations);
+                Locations.AddRange(locations);
                 await context.SaveChangesAsync();
 
                 // Seed Users via UserManager
@@ -74,11 +79,11 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 {
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[0].Id, PlaceID = place[0].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 10, 9, 0, 0), EndTime = new DateTime(2026, 9, 10, 10, 0, 0), TotalPrice = place[0].Price
+                    MemberId = createdUsers[0].Id,PlaceID = place[0].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 10, 9, 0, 0), EndTime = new DateTime(2026, 9, 10, 10, 0, 0), TotalPrice = place[0].Price
                 },
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[1].Id,
+                    MemberId = createdUsers[1].Id,
                     PlaceID = place[1].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
                     StartTime = new DateTime(2026, 9, 14, 9, 0, 0),
@@ -87,7 +92,7 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 },
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[2].Id,
+                    MemberId = createdUsers[2].Id,
                     PlaceID = place[2].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
                     StartTime = new DateTime(2026, 9, 15, 9, 0, 0),
@@ -96,8 +101,8 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 },
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[3].Id,
-                    PlaceID = place[2].PlaceID,
+                    MemberId = createdUsers[3].Id,
+                    PlaceID = place[3].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
                     StartTime = new DateTime(2026, 9, 16, 9, 0, 0),
                     EndTime = new DateTime(2026, 9, 17, 10, 0, 0),
@@ -105,20 +110,25 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 },
                 new Confirmation
                 {
-                    VOSG_NKBDId = createdUsers[4].Id, PlaceID = place[4].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 19, 9, 0, 0), EndTime = new DateTime(2026, 9, 18, 10, 0, 0), TotalPrice = place[4].Price
-                }
+                    MemberId = createdUsers[4].Id,
+                    PlaceID = place[4].PlaceID,
+                    ConfirmationDate = new DateTime(2026, 9, 10),
+                    StartTime = new DateTime(2026, 9, 19, 9, 0, 0),
+                    EndTime = new DateTime(2026, 9, 18, 10, 0, 0),
+                    TotalPrice = place[4].Price
+                },
                 };
-                object confirmation = context.Confirmation; ;
+                object confirmation = context.Confirmation;
                 await context.SaveChangesAsync();
 
                 // Seed Payments
                 var payments = new Payment[]
                 {
                 new(){ Confirmation[0].VOSG_NKBDId, PaymentAmount = confirmation[0].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { VOSG_NKBDId = confirmation[1].VOSG_NKBDId, PaymentAmount = confirmation[1].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { VOSG_NKBDId = confirmation[2].VOSG_NKBDId, PaymentAmount = confirmation[2].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { VOSG_NKBDId = confirmation[3].VOSG_NKBDId, PaymentAmount = confirmation[3].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
-                new Payment { VOSG_NKBDId = confirmation[4].VOSG_NKBDId, PaymentAmount = confirmation[4].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" }
+                new Payment { VOSG_NKBDId = confirmation[1].MemberId, PaymentAmount = confirmation[1].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[2].MemberId, PaymentAmount = confirmation[2].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[3].MemberId, PaymentAmount = confirmation[3].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
+                new Payment { VOSG_NKBDId = confirmation[4].MemberId, PaymentAmount = confirmation[4].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" }
                 };
                 context.Payments.AddRange(payments);
                 await context.SaveChangesAsync();
