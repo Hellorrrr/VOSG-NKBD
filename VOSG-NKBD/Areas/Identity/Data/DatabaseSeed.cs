@@ -22,61 +22,63 @@ namespace VOSG_NKBD.Areas.Identity.Data
             object value = context.Database.EnsureCreated();
 
             // Prevent duplicate seeding
-            if (!context.Locations.Any()
+            if (context.Locations.Any()
                  context.Activites.Any()
                   | context.Place.Any()
                   | context.Payments.Any())
             {
-                // Seed Locations
-                var locations = new Location[]
-                {
+                return;
+            }
+            // Seed Locations 
+            var locations = new Location[]
+            {
                 new Location { LocationName = "Auckland Showgrounds", Addresss = "217 Green Lane West", Suburb = "Epsom", City = "Auckland", Country = "New Zealand", PostalCode = "1051", PhoneNumber = "+64 9-623-0092" },
                 new Location { LocationName = "Nathan Phillips Square", Addresss = "100 Queen Street West", Suburb = "Central", City = "Toronto", Country = "Canada", PostalCode = "M5H 2N2", PhoneNumber = "+1 416-392-2489" },
                 new Location { LocationName = "Dr. Phillips Center for the Performing Arts", Addresss = "445 South Magnolia Avenue", Suburb = "Central", City = "Orlando", Country = "The USA", PostalCode = "FL 32801", PhoneNumber = "+1 407-358-6603" },
                 new Location { LocationName = "Federation Square", Addresss = "Swanston Street & Flinders Street", Suburb = "Central", City = "Melbourne", Country = "Australia", PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
                 new() { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
-                };
-                Locations.AddRange(locations);
-                await context.SaveChangesAsync();
+            };
+            Locations.AddRange(locations);
+            await context.SaveChangesAsync();
 
-                // Seed Users via UserManager
-                var usersToCreate = new (string FirstName, string LastName, string Email, string Phone)[]
-                {
+            // Seed Users via UserManager
+            var usersToCreate = new (string FirstName, string LastName, string Email, string Phone)[]
+            {
                 ("Nicolas", "Jackson", "NicolasJackson@gmail.com", "+64-02-783-21892"),
                 ("Jenny", "Monroe", "JennyMonroe@gmail.com", "+1-416-123-4567"),
                 ("Alice", "Sydney", "AliceSydney@gmail.com", "+1-407-123-4567"),
                 ("Bobby", "Gordon", "BobbyGordon@gmail.com", "+61-412-345-678"),
                 ("Emma", "Hathaway", "EmmaHathaway@gmail.com", "+358-41-123-4567")
-                };
+            };
 
-                var createdUsers = new List<VOSG_NKBDUser>();
+            var createdUsers = new List<VOSG_NKBDUser>();
 
-                foreach (var u in usersToCreate)
+            foreach (var u in usersToCreate)
+            {
+                var existingUser = await userManager.FindByEmailAsync(u.Email);
+                if (existingUser == null)
                 {
-                    var existingUser = await userManager.FindByEmailAsync(u.Email);
-                    if (existingUser == null)
+                    var user = new VOSG_NKBDUser
                     {
-                        var user = new VOSG_NKBDUser
-                        {
-                            UserName = u.Email,
-                            Email = u.Email,
-                            FirstName = u.FirstName,
-                            LastName = u.LastName,
-                            Phone = u.Phone
-                        };
-                        var result = await userManager.CreateAsync(user, "DefaultPassword456!");
-                        if (result.Succeeded)
-                        {
-                            createdUsers.Add(user);
-                        }
-                    }
-                    else
+                        UserName = u.Email,
+                        Email = u.Email,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        Phone = u.Phone
+                    };
+                    var result = await userManager.CreateAsync(user, "DefaultPassword456!");
+                    if (result.Succeeded)
                     {
-                        createdUsers.Add(existingUser);
+                        createdUsers.Add(user);
                     }
                 }
-                var confirmation = new Confirmation[]
+                else
                 {
+                    createdUsers.Add(existingUser);
+                }
+            }
+            var confirmation = new Confirmation[]
+            {
                 new Confirmation
                 {
                     MemberId = createdUsers[0].Id,PlaceID = place[0].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 10, 9, 0, 0), EndTime = new DateTime(2026, 9, 10, 10, 0, 0), TotalPrice = place[0].Price
@@ -117,22 +119,21 @@ namespace VOSG_NKBD.Areas.Identity.Data
                     EndTime = new DateTime(2026, 9, 18, 10, 0, 0),
                     TotalPrice = place[4].Price
                 },
-                };
-                object confirmation = context.Confirmation;
-                await context.SaveChangesAsync();
+            };
+            object confirmation = context.Confirmation;
+            await context.SaveChangesAsync();
 
-                // Seed Payments
-                var payments = new Payment[]
-                {
+            // Seed Payments
+            var payments = new Payment[]
+            {
                 new(){ Confirmation[0].VOSG_NKBDId, PaymentAmount = confirmation[0].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
                 new Payment { VOSG_NKBDId = confirmation[1].MemberId, PaymentAmount = confirmation[1].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
                 new Payment { VOSG_NKBDId = confirmation[2].MemberId, PaymentAmount = confirmation[2].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
                 new Payment { VOSG_NKBDId = confirmation[3].MemberId, PaymentAmount = confirmation[3].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
                 new Payment { VOSG_NKBDId = confirmation[4].MemberId, PaymentAmount = confirmation[4].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" }
-                };
-                context.Payments.AddRange(payments);
-                await context.SaveChangesAsync();
-            }
+            };
+            context.Payments.AddRange(payments);
+            await context.SaveChangesAsync();
         }
     }
 }
