@@ -9,6 +9,7 @@
         public object Place { get; internal set; }
         public object Payments { get; internal set; }
         public object Payment { get; internal set; }
+        public object Bookings { get; internal set; }
 
         internal async Task SaveChangesAsync()
         {

@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Build.Evaluation.Context;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using VOSG_NKBD.Areas.Identity.Data;
 using VOSG_NKBD.Data;
 using VOSG_NKBD.Models;
-using Location = VOSG_NKBD.Data.Location;
 
 namespace VOSG_NKBD.Areas.Identity.Data
 {
     public static class DatabaseSeed
     {
-        private static object place;
-
-        public static object Confirmation { get; private set; }
-
         public static async Task SeedDataAsync(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
@@ -19,16 +20,12 @@ namespace VOSG_NKBD.Areas.Identity.Data
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
 
             // Ensure database is created
-            object value = context.Database.EnsureCreated();
+            context.Database.EnsureCreated();
 
             // Prevent duplicate seeding
-            if (context.Locations.Any()
-                 context.Activites.Any()
-                  | context.Place.Any()
-                  | context.Payments.Any())
-            {
+            if (context.Locations.Any() || context.Bookings.Any() || context.Courts.Any() || context.Equipments.Any() || context.Payments.Any())
                 return;
-            }
+            
             // Seed Locations 
             var locations = new Location[]
             {
@@ -36,9 +33,9 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 new Location { LocationName = "Nathan Phillips Square", Addresss = "100 Queen Street West", Suburb = "Central", City = "Toronto", Country = "Canada", PostalCode = "M5H 2N2", PhoneNumber = "+1 416-392-2489" },
                 new Location { LocationName = "Dr. Phillips Center for the Performing Arts", Addresss = "445 South Magnolia Avenue", Suburb = "Central", City = "Orlando", Country = "The USA", PostalCode = "FL 32801", PhoneNumber = "+1 407-358-6603" },
                 new Location { LocationName = "Federation Square", Addresss = "Swanston Street & Flinders Street", Suburb = "Central", City = "Melbourne", Country = "Australia", PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
-                new() { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
+                new Location { LocationName = "Finlandia Hall", Addresss = "Mannerheimintie 13", Suburb = "Central", City = "Helsinki", Country = "Finland",  PostalCode = "00100", PhoneNumber = "+358 9 40241" }
             };
-            Locations.AddRange(locations);
+            context.Locations.AddRange(locations);
             await context.SaveChangesAsync();
 
             // Seed Users via UserManager
@@ -77,12 +74,9 @@ namespace VOSG_NKBD.Areas.Identity.Data
                     createdUsers.Add(existingUser);
                 }
             }
-            var confirmation = new Confirmation[]
+
+            var bookings = new Booking[]
             {
-                new Confirmation
-                {
-                    MemberId = createdUsers[0].Id,PlaceID = place[0].PlaceID, ConfirmationDate = new DateTime(2026, 9, 10), StartTime = new DateTime(2026, 9, 10, 9, 0, 0), EndTime = new DateTime(2026, 9, 10, 10, 0, 0), TotalPrice = place[0].Price
-                },
                 new Confirmation
                 {
                     MemberId = createdUsers[1].Id,
