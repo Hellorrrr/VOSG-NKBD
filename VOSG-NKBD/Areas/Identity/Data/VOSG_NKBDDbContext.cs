@@ -10,6 +10,8 @@
         public object Payments { get; internal set; }
         public object Payment { get; internal set; }
         public object Bookings { get; internal set; }
+        public object Courts { get; internal set; }
+        public object Equipments { get; internal set; }
 
         internal async Task SaveChangesAsync()
         {

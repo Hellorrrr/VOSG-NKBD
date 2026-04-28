@@ -34,7 +34,7 @@ namespace VOSG_NKBD.Models
         public string PhoneNumber { get; set; }
 
         public ICollection<VOSG_NKBDUser>? VOSG_NKBDUser { get; set; }
-
+        public int LocationsID { get; internal set; }
     }
 }
 

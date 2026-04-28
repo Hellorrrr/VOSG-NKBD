@@ -16,24 +16,26 @@ namespace VOSG_NKBD.Areas.Identity.Data
         public static async Task SeedDataAsync(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
-            var context = serviceScope.ServiceProvider.GetRequiredService<VOSG_NKBDDbContext>();
-            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
+            var context            = serviceScope.ServiceProvider.GetRequiredService<VOSG_NKBDDbContext>();
+            var userManager        = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
 
             // Ensure database is created
             context.Database.EnsureCreated();
 
             // Prevent duplicate seeding
             if (context.Locations.Any() || context.Bookings.Any() || context.Courts.Any() || context.Equipments.Any() || context.Payments.Any())
+            {
                 return;
-            
+            }
+
             // Seed Locations 
             var locations = new Location[]
             {
-                new Location { LocationName = "Auckland Showgrounds",                        Addresss = "217 Green Lane West",               Suburb = "Epsom",   City = "Auckland",  Country = "New Zealand", PostalCode = "1051",     PhoneNumber = "+64 9-623-0092" },
-                new Location { LocationName = "Nathan Phillips Square",                      Addresss = "100 Queen Street West",             Suburb = "Central", City = "Toronto",   Country = "Canada",      PostalCode = "M5H 2N2",  PhoneNumber = "+1 416-392-2489" },
-                new Location { LocationName = "Dr. Phillips Center for the Performing Arts", Addresss = "445 South Magnolia Avenue",         Suburb = "Central", City = "Orlando",   Country = "The USA",     PostalCode = "FL 32801", PhoneNumber = "+1 407-358-6603" },
-                new Location { LocationName = "Federation Square",                           Addresss = "Swanston Street & Flinders Street", Suburb = "Central", City = "Melbourne", Country = "Australia",   PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
-                new Location { LocationName = "Finlandia Hall",                              Addresss = "Mannerheimintie 13",                Suburb = "Central", City = "Helsinki",  Country = "Finland",     PostalCode = "00100",    PhoneNumber = "+358 9 40241" }
+                new Location { LocationName = "Auckland Showgrounds",                        Addresss = "217 Green Lane West",               Suburb = "Epsom",        City = "Auckland",  Country = "New Zealand", PostalCode = "1051",     PhoneNumber = "+64 9-623-0092" },
+                new Location { LocationName = "Nathan Phillips Square",                      Addresss = "100 Queen Street West",             Suburb = "Central City", City = "Toronto",   Country = "Canada",      PostalCode = "M5H 2N2",  PhoneNumber = "+1 416-392-2489" },
+                new Location { LocationName = "Dr. Phillips Center for the Performing Arts", Addresss = "445 South Magnolia Avenue",         Suburb = "Central City", City = "Orlando",   Country = "The USA",     PostalCode = "FL 32801", PhoneNumber = "+1 407-358-6603" },
+                new Location { LocationName = "Federation Square",                           Addresss = "Swanston Street & Flinders Street", Suburb = "Central City", City = "Melbourne", Country = "Australia",   PostalCode = "VIC 3000", PhoneNumber = "+61 3 9655 1900" },
+                new Location { LocationName = "Finlandia Hall",                              Addresss = "Mannerheimintie 13",                Suburb = "Central City", City = "Helsinki",  Country = "Finland",     PostalCode = "00100",    PhoneNumber = "+358 9 40241" }
             };
             context.Locations.AddRange(locations);
             await context.SaveChangesAsync();
@@ -57,11 +59,11 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 {
                     var user = new VOSG_NKBDUser
                     {
-                        UserName = u.Email,
-                        Email = u.Email,
+                        UserName  = u.Email,
+                        Email     = u.Email,
                         FirstName = u.FirstName,
-                        LastName = u.LastName,
-                        Phone = u.Phone
+                        LastName  = u.LastName,
+                        Phone     = u.Phone
                     };
                     var result = await userManager.CreateAsync(user, "DefaultPassword456!");
                     if (result.Succeeded)
@@ -79,39 +81,39 @@ namespace VOSG_NKBD.Areas.Identity.Data
             {
                 new Confirmation
                 {
-                    MemberId = createdUsers[1].Id,
-                    PlaceID = place[1].PlaceID,
+                    MemberId         = createdUsers[1].Id,
+                    PlaceID          = place[1].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 14, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 13, 10, 0, 0),
-                    TotalPrice = place[1].Price
+                    StartTime        = new DateTime(2026, 9, 14, 9, 0, 0),
+                    EndTime          = new DateTime(2026, 9, 13, 10, 0, 0),
+                    TotalPrice       = place[1].Price
                 },
                 new Confirmation
                 {
-                    MemberId = createdUsers[2].Id,
-                    PlaceID = place[2].PlaceID,
+                    MemberId         = createdUsers[2].Id,
+                    PlaceID          = place[2].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 15, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 16, 10, 0, 0),
-                    TotalPrice = place[2].Price
+                    StartTime        = new DateTime(2026, 9, 15, 9, 0, 0),
+                    EndTime          = new DateTime(2026, 9, 16, 10, 0, 0),
+                    TotalPrice       = place[2].Price
                 },
                 new Confirmation
                 {
-                    MemberId = createdUsers[3].Id,
-                    PlaceID = place[3].PlaceID,
+                    MemberId         = createdUsers[3].Id,
+                    PlaceID          = place[3].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 16, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 17, 10, 0, 0),
-                    TotalPrice = place[3].Price
+                    StartTime        = new DateTime(2026, 9, 16, 9, 0, 0),
+                    EndTime          = new DateTime(2026, 9, 17, 10, 0, 0),
+                    TotalPrice       = place[3].Price
                 },
                 new Confirmation
                 {
-                    MemberId = createdUsers[4].Id,
-                    PlaceID = place[4].PlaceID,
+                    MemberId         = createdUsers[4].Id,
+                    PlaceID          = place[4].PlaceID,
                     ConfirmationDate = new DateTime(2026, 9, 10),
-                    StartTime = new DateTime(2026, 9, 19, 9, 0, 0),
-                    EndTime = new DateTime(2026, 9, 18, 10, 0, 0),
-                    TotalPrice = place[4].Price
+                    StartTime        = new DateTime(2026, 9, 19, 9, 0, 0),
+                    EndTime          = new DateTime(2026, 9, 18, 10, 0, 0),
+                    TotalPrice       = place[4].Price
                 },
             };
             object confirmation = context.Confirmation;
