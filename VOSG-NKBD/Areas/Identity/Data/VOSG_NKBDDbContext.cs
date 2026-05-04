@@ -1,21 +1,23 @@
-﻿namespace VOSG_NKBD.Data
+﻿using Microsoft.EntityFrameworkCore;
+using VOSG_NKBD.Models;
+ 
+namespace VOSG_NKBD.Data
 {
-    internal class VOSG_NKBDDbContext
-    {
-        public object Confirmation { get; internal set; }
-        public object Database { get; internal set; }
-        public object Locations { get; internal set; }
-        public object Activites { get; internal set; }
-        public object Place { get; internal set; }
-        public object Payments { get; internal set; }
-        public object Payment { get; internal set; }
-        public object Bookings { get; internal set; }
-        public object Courts { get; internal set; }
-        public object Equipments { get; internal set; }
-
-        internal async Task SaveChangesAsync()
-        {
-            throw new NotImplementedException();
-        }
-    }
+       
+       public class VOSG_NKBDDbContext : DbContext
+       {
+          public VOSG_NKBDDbContext(DbContextOptions<VOSG_NKBDDbContext> options)
+              : base(options) { }
+  
+          public DbSet<Location> Locations { get; set; } = default!;
+          public DbSet<Place> Places { get; set; } = default!;
+          public DbSet<Confirmation> Confirmations { get; set; } = default!;
+          public DbSet<Payment> Payments { get; set; } = default!;
+          public DbSet<Activities> Activities { get; set; } = default!;
+  
+          protected override void OnModelCreating(ModelBuilder modelBuilder)
+          {
+              base.OnModelCreating(modelBuilder);
+          }
+       }
 }
