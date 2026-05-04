@@ -1,18 +1,15 @@
-﻿using VOSG_NKBD.Models;
 
   using System.ComponentModel.DataAnnotations;
    using System.ComponentModel.DataAnnotations.Schema;
    using VOSG_NKBD.Models;
  
-   namespace VOSG_NKBD.Data
+namespace VOSG_NKBD.Areas.Identity.Data
    {
-       
        public class Payment
        {
           [Key]
           public int PaymentID { get; set; }
   
-          /
           [Required]
           public int ConfirmationID { get; set; }
   
