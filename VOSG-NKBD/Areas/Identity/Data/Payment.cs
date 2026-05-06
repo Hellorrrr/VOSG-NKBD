@@ -1,8 +1,7 @@
 ﻿using VOSG_NKBD.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-  using System.ComponentModel.DataAnnotations;
-   using System.ComponentModel.DataAnnotations.Schema;
-   using VOSG_NKBD.Models;
  
    namespace VOSG_NKBD.Data
    {
@@ -12,7 +11,7 @@
           [Key]
           public int PaymentID { get; set; }
   
-          /
+          
           [Required]
           public int ConfirmationID { get; set; }
   
@@ -33,5 +32,5 @@
   
           [ForeignKey("VOSG_NKBDId")]
           public VOSG_NKBDUser? User { get; set; }
-      }
-  }
+       }
+   }

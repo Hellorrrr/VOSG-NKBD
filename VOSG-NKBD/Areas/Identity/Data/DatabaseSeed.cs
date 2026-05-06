@@ -16,19 +16,18 @@ namespace VOSG_NKBD.Areas.Identity.Data
         public static async Task SeedDataAsync(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
-            var context            = serviceScope.ServiceProvider.GetRequiredService<VOSG_NKBDDbContext>();
-            var userManager        = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
+            var context = serviceScope.ServiceProvider.GetRequiredService<VOSG_NKBDDbContext>();
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<VOSG_NKBDUser>>();
 
-            // Ensure database is created
             context.Database.EnsureCreated();
 
-            // Prevent duplicate seeding
+            
             if (context.Locations.Any() || context.Bookings.Any() || context.Courts.Any() || context.Equipments.Any() || context.Payments.Any())
             {
                 return;
             }
 
-            // Seed Locations 
+        
             var locations = new Location[]
             {
                 new Location { LocationName = "Auckland Showgrounds",                        Addresss = "217 Green Lane West",               Suburb = "Epsom",        City = "Auckland",  Country = "New Zealand", PostalCode = "1051",     PhoneNumber = "+64 9-623-0092" },
@@ -40,7 +39,7 @@ namespace VOSG_NKBD.Areas.Identity.Data
             context.Locations.AddRange(locations);
             await context.SaveChangesAsync();
 
-            // Seed Users via UserManager
+      
             var usersToCreate = new (string FirstName, string LastName, string Email, string Phone)[]
             {
                 ("Nicolas", "Jackson",  "NicolasJackson@gmail.com", "+64-02-783-21892"),
@@ -59,11 +58,11 @@ namespace VOSG_NKBD.Areas.Identity.Data
                 {
                     var user = new VOSG_NKBDUser
                     {
-                        UserName  = u.Email,
-                        Email     = u.Email,
+                        UserName = u.Email,
+                        Email = u.Email,
                         FirstName = u.FirstName,
-                        LastName  = u.LastName,
-                        Phone     = u.Phone
+                        LastName = u.LastName,
+                        Phone = u.Phone
                     };
                     var result = await userManager.CreateAsync(user, "DefaultPassword456!");
                     if (result.Succeeded)
@@ -119,7 +118,6 @@ namespace VOSG_NKBD.Areas.Identity.Data
             object confirmation = context.Confirmation;
             await context.SaveChangesAsync();
 
-            // Seed Payments
             var payments = new Payment[]
             {
                 new(){ Confirmation[0].VOSG_NKBDId, PaymentAmount = confirmation[0].TotalPrice, PaymentDate = DateTime.Today, PaymentStatus = "Paid" },
@@ -130,6 +128,11 @@ namespace VOSG_NKBD.Areas.Identity.Data
             };
             context.Payments.AddRange(payments);
             await context.SaveChangesAsync();
+        }
+
+        private static object GetPlace()
+        {
+            return place;
         }
     }
 }
