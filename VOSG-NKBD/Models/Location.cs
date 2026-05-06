@@ -1,12 +1,12 @@
-﻿  using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
  
-   namespace VOSG_NKBD.Models
-   {
+namespace VOSG_NKBD.Models
+{
        public class Location
        {
            
-           [Key]
-           public int LocationsID { get; set; }
+          [Key]
+          public int LocationsID { get; set; }
   
           [Required, MinLength(2), MaxLength(30)]
           [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "Location name must only contain letters, numbers or spaces.")]
@@ -44,6 +44,6 @@
   
           
           public ICollection<Place>? Places { get; set; }
-      }
-  }
+       }
+}
 
