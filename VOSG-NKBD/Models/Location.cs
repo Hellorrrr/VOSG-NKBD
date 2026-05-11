@@ -1,16 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿  using System.ComponentModel.DataAnnotations;
  
-namespace VOSG_NKBD.Models
-{
-using System.ComponentModel.DataAnnotations;
-
-namespace VOSG_NKBD.Models
-   {
+  namespace VOSG_NKBD.Models
+  {
        public class Location
        {
-           
-          [Key]
-          public int LocationsID { get; set; }
+
+           [Key]
+           public int LocationsID { get; set; }
   
           [Required, MinLength(2), MaxLength(30)]
           [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "Location name must only contain letters, numbers or spaces.")]
@@ -31,8 +27,7 @@ namespace VOSG_NKBD.Models
           [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "City must only contain letters or spaces.")]
           [Display(Name = "City")]
           public string City { get; set; } = string.Empty;
-  
-          
+
           [Required, MaxLength(30)]
           public string Country { get; set; } = string.Empty;
   
@@ -45,11 +40,7 @@ namespace VOSG_NKBD.Models
           [RegularExpression(@"^\+?\d[\d\-]{6,14}$", ErrorMessage = "Invalid phone number format.")]
           [Display(Name = "Phone Number")]
           public string PhoneNumber { get; set; } = string.Empty;
-  
-          
+
           public ICollection<Place>? Places { get; set; }
        }
-}
-
-       }
-}
+  }

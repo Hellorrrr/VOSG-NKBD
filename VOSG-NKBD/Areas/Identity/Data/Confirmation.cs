@@ -1,63 +1,33 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VOSG_NKBD.Models;
- 
-namespace VOSG_NKBD.Data
+
+namespace VOSG_NKBD.Areas.Identity.Data
 {
-       
-       public class Confirmation
-       {
-           [Key]
-          public int ConfirmationID { get; set; }
-  
-          
-          [Required]
-          public string MemberId { get; set; } = string.Empty;
-  
-          
-          [Required]
-          public int PlaceID { get; set; }
-  
-          public DateTime ConfirmationDate { get; set; }
-          public DateTime StartTime { get; set; }
-          public DateTime EndTime { get; set; }
-  
-          
-          public decimal TotalPrice { get; set; }
-  
-          [ForeignKey("MemberId")]
-          public VOSG_NKBDUser? Member { get; set; }
-  
-          [ForeignKey("PlaceID")]
-          public Place? Place { get; set; }
-  
-          public ICollection<Payment>? Payments { get; set; }
-       }
+    public class Confirmation
+    {
+        [Key]
+        public int ConfirmationID { get; set; }
 
-       public class Confirmation
-       {
-           [Key]
-          public int ConfirmationID { get; set; }
-  
-       
-          [Required]
-          public string MemberId { get; set; } = string.Empty;
+        [Required]
+        public string VOSG_NKBDId { get; set; } = string.Empty;
 
-          [Required]
-          public int PlaceID { get; set; }
-  
-          public DateTime ConfirmationDate { get; set; }
-          public DateTime StartTime { get; set; }
-          public DateTime EndTime { get; set; }
+        [Required]
+        public int BookingID { get; set; }
 
-          public decimal TotalPrice { get; set; }
-  
-          [ForeignKey("MemberId")]
-          public VOSG_NKBDUser? Member { get; set; }
-  
-          [ForeignKey("PlaceID")]
-          public Place? Place { get; set; }
-  
-          public ICollection<Payment>? Payments { get; set; }
-       }
+        [Required]
+        public decimal TotalPrice { get; set; }
+
+        [Required]
+        public string ConfirmationStatus { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Date)]
+        public DateTime ConfirmationDate { get; set; }
+
+        [ForeignKey("VOSG_NKBDId")]
+        public VOSG_NKBDUser? User { get; set; }
+
+        [ForeignKey("BookingID")]
+        public Booking? Booking { get; set; }
+    }
 }

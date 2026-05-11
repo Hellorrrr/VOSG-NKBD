@@ -7,7 +7,7 @@ namespace VOSG_NKBD.Data
        public class VOSG_NKBDDbContext : DbContext
        {
           public VOSG_NKBDDbContext(DbContextOptions<VOSG_NKBDDbContext> options)
-              : base(options) { }
+          : base(options) { }
   
           public DbSet<Location> Locations { get; set; } = default!;
           public DbSet<Place> Places { get; set; } = default!;
