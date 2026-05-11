@@ -32,7 +32,8 @@ using VOSG_NKBD.Areas.Identity.Data;
 
   app.UseHttpsRedirection();
 
-  app.UseStaticFiles();
+  
+.app.UseStaticFiles();
   app.UseRouting();
 
   app.UseAuthentication();
