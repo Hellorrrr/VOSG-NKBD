@@ -3,7 +3,7 @@ using VOSG_NKBD.Models;
  
 namespace VOSG_NKBD.Data
 {
-       
+
        public class VOSG_NKBDDbContext : DbContext
        {
           public VOSG_NKBDDbContext(DbContextOptions<VOSG_NKBDDbContext> options)

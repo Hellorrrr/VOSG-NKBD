@@ -7,7 +7,7 @@ namespace VOSG_NKBD.Models
         public int MovieId { get; set; }
         public string Title { get; set; }
         public string Genre { get; set; }
-        [DataType(DataType.Date)]// This annotation ensures that the only date part is considered, ignoring the time component.
+        [DataType(DataType.Date)]
         public DateTime ReleaseYear { get; set; }
 
         public string Producer { get; set; }

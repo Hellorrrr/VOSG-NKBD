@@ -2,13 +2,18 @@
  
 namespace VOSG_NKBD.Models
 {
+namespace VOSG_NKBD.Models
+   {
        
        public class VOSG_NKBDUser : IdentityUser
        {
-           
-          public string FirstName { get; set; } = string.Empty;
+        
+           public string FirstName { get; set; } = string.Empty;
           public string LastName { get; set; } = string.Empty;
           public string Phone { get; set; } = string.Empty;
           
        }
 } 
+       
+       }
+}

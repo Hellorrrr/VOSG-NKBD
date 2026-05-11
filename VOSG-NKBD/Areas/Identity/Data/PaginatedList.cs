@@ -7,6 +7,11 @@ namespace VOSG_NKBD.Controllers
        {
           public int PageIndex { get; private set; }
           public int TotalPages { get; private set; }
+
+    public class PaginatedList<T> : List<T>
+    {
+          public int PageIndex { get; private set; }
+          public int TotalPages { get; private set; }
   
           public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
           {
@@ -26,5 +31,5 @@ namespace VOSG_NKBD.Controllers
           .Take(pageSize).ToListAsync();
           return new PaginatedList<T>(items, count, pageIndex, pageSize);
           }
-       }
+    }
 }

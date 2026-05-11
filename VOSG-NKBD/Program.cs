@@ -12,6 +12,8 @@ using VOSG_NKBD.Areas.Identity.Data;
   
   builder.Services.AddDbContext<VOSG_NKBDContext>(options =>
       options.UseSqlServer(connectionString));
+  builder.Services.AddDbContext<VOSG_NKBDContext>(options =>
+      options.UseSqlServer(connectionString));
 
   builder.Services.AddDbContext<VOSG_NKBDDbContext>(options =>
       options.UseSqlServer(connectionString));
@@ -19,6 +21,9 @@ using VOSG_NKBD.Areas.Identity.Data;
   builder.Services.AddDefaultIdentity<VOSG_NKBDUser>(options =>
       options.SignIn.RequireConfirmedAccount = false)
  .AddEntityFrameworkStores<VOSG_NKBDContext>();
+  builder.Services.AddDefaultIdentity<VOSG_NKBDUser>(options =>
+      options.SignIn.RequireConfirmedAccount = false)
+.AddEntityFrameworkStores<VOSG_NKBDContext>();
 
   builder.Services.AddControllersWithViews();
 
@@ -28,6 +33,10 @@ using VOSG_NKBD.Areas.Identity.Data;
   {
   app.UseExceptionHandler("/Home/Error");
   app.UseHsts();
+  }
+  {
+          app.UseExceptionHandler("/Home/Error");
+          app.UseHsts();
   }
 
   app.UseHttpsRedirection();
