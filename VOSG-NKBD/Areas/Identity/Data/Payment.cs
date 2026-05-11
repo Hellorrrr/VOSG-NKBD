@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using VOSG_NKBD.Models;
 
 namespace VOSG_NKBD.Data
+ 
+namespace VOSG_NKBD.Data
 {
 
     public class Payment
@@ -34,4 +36,33 @@ namespace VOSG_NKBD.Data
         [ForeignKey("VOSG_NKBDId")]
         public VOSG_NKBDUser? User { get; set; }
     }
+       
+       public class Payment
+       {
+          [Key]
+          public int PaymentID { get; set; }
+  
+          
+          [Required]
+          public int ConfirmationID { get; set; }
+  
+         
+          [Required]
+          public string VOSG_NKBDId { get; set; } = string.Empty;
+  
+          [Required]
+          public decimal PaymentAmount { get; set; }
+  
+          [Required, DataType(DataType.Date)]
+          public DateTime PaymentDate { get; set; }
+  
+          [Required]
+          public string PaymentStatus { get; set; } = string.Empty;
+  
+          [ForeignKey("ConfirmationID")]
+          public Confirmation? Confirmation { get; set; }
+  
+          [ForeignKey("VOSG_NKBDId")]
+          public VOSG_NKBDUser? User { get; set; }
+       }
 }

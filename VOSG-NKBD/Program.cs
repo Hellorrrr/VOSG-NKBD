@@ -9,12 +9,18 @@ using VOSG_NKBD.Areas.Identity.Data;
   var connectionString = builder.Configuration.GetConnectionString("VOSG_NKBDContextConnection")
       ?? throw new InvalidOperationException("Connection string 'VOSG_NKBDContextConnection' not found.");
 
+  
+  builder.Services.AddDbContext<VOSG_NKBDContext>(options =>
+      options.UseSqlServer(connectionString));
   builder.Services.AddDbContext<VOSG_NKBDContext>(options =>
       options.UseSqlServer(connectionString));
 
   builder.Services.AddDbContext<VOSG_NKBDDbContext>(options =>
       options.UseSqlServer(connectionString));
 
+  builder.Services.AddDefaultIdentity<VOSG_NKBDUser>(options =>
+      options.SignIn.RequireConfirmedAccount = false)
+ .AddEntityFrameworkStores<VOSG_NKBDContext>();
   builder.Services.AddDefaultIdentity<VOSG_NKBDUser>(options =>
       options.SignIn.RequireConfirmedAccount = false)
 .AddEntityFrameworkStores<VOSG_NKBDContext>();
@@ -25,6 +31,10 @@ using VOSG_NKBD.Areas.Identity.Data;
 
   if (!app.Environment.IsDevelopment())
   {
+  app.UseExceptionHandler("/Home/Error");
+  app.UseHsts();
+  }
+  {
           app.UseExceptionHandler("/Home/Error");
           app.UseHsts();
   }
@@ -34,7 +44,6 @@ using VOSG_NKBD.Areas.Identity.Data;
   app.UseStaticFiles();
   app.UseRouting();
 
-
   app.UseAuthentication();
   app.UseAuthorization();
 
@@ -42,7 +51,6 @@ using VOSG_NKBD.Areas.Identity.Data;
   app.MapControllerRoute(
   name: "default",
   pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
   await DatabaseSeed.SeedDataAsync(app);
 
