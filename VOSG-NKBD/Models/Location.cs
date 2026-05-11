@@ -1,6 +1,6 @@
-﻿  using System.ComponentModel.DataAnnotations;
- 
-   namespace VOSG_NKBD.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace VOSG_NKBD.Models
    {
        public class Location
        {
@@ -44,6 +44,5 @@
   
           
           public ICollection<Place>? Places { get; set; }
-      }
-  }
-
+       }
+}
