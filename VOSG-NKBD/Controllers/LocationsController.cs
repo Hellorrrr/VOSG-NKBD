@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VOSG_NKBD.Data;
 using VOSG_NKBD.Models;
-namespace VOSG_NKBD.Controllers
+ 
+   namespace VOSG_NKBD.Controllers
    {
        
       public class LocationsController : Controller
@@ -16,7 +17,7 @@ namespace VOSG_NKBD.Controllers
           }
   
           public async Task<IActionResult> Index(string searchString, int? pageNumber,
-                                                  string currentFilter, string sortOrder)
+                                                 string currentFilter, string sortOrder)
           {
               ViewData["NameSortParm"]   = String.IsNullOrEmpty(sortOrder)? "name_desc" : "name_asc";
               ViewData["DateSortParm"]   = sortOrder == "City" ? "city_desc" : "city";
@@ -25,11 +26,11 @@ namespace VOSG_NKBD.Controllers
   
               var locations = from l in _context.Locations select l;
   
-              if (!String.IsNullOrEmpty(searchString))
+                  if (!String.IsNullOrEmpty(searchString))
                   locations = locations.Where(l =>
-                      l.LocationName.Contains(searchString) ||
-                      l.Addresss.Contains(searchString)     ||
-                      l.City.Contains(searchString));
+                  l.LocationName.Contains(searchString) ||
+                  l.Addresss.Contains(searchString)     ||
+                  l.City.Contains(searchString));
   
               switch (sortOrder)
               {
@@ -39,19 +40,19 @@ namespace VOSG_NKBD.Controllers
                   default:          locations = locations.OrderBy(l => l.LocationName);           break;
               }
 
-                if (searchString != null) pageNumber = 1;
-                else searchString = currentFilter;
+                  if (searchString != null) pageNumber = 1;
+                  else searchString = currentFilter;
 
-                return View(await PaginatedList<Location>.CreateAsync(
-                locations.AsNoTracking(), pageNumber ?? 1, pageSize: 10));
+                  return View(await PaginatedList<Location>.CreateAsync(
+                  locations.AsNoTracking(), pageNumber ?? 1, pageSize: 10));
           }
 
           public async Task<IActionResult> Details(int? id)
           {
-                if (id == null) return NotFound();
-                var location = await _context.Locations.FirstOrDefaultAsync(m => m.LocationsID == id);
-                if (location == null) return NotFound();
-                return View(location);
+                  if (id == null) return NotFound();
+                  var location = await _context.Locations.FirstOrDefaultAsync(m => m.LocationsID == id);
+                  if (location == null) return NotFound();
+                  return View(location);
           }
 
           [Authorize(Roles = "Admin")]
@@ -61,67 +62,71 @@ namespace VOSG_NKBD.Controllers
           public async Task<IActionResult> Create(
               [Bind("LocationsID,LocationName,Addresss,Suburb,City,Country,PostalCode,PhoneNumber")] Location location)
           {
-                if (ModelState.IsValid)
-                {
-                _context.Add(location);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-                }
-                return View(location);
+                  if (ModelState.IsValid)
+                  {
+                  _context.Add(location);
+                  await _context.SaveChangesAsync();
+                  return RedirectToAction(nameof(Index));
+                  }
+                  return View(location);
           }
 
           [Authorize(Roles = "Admin")]
           public async Task<IActionResult> Edit(int? id)
           {
-                if (id == null) return NotFound();
-                var location = await _context.Locations.FindAsync(id);
-                if (location == null) return NotFound();
-                return View(location);
+                  if (id == null) return NotFound();
+                  var location = await _context.Locations.FindAsync(id);
+                  if (location == null) return NotFound();
+                  return View(location);
           }
 
           [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
           public async Task<IActionResult> Edit(int id,
-              [Bind("LocationsID,LocationName,Addresss,Suburb,City,Country,PostalCode,PhoneNumber")] Location location)
+                  [Bind("LocationsID,LocationName,Addresss,Suburb,City,Country,PostalCode,PhoneNumber")] Location location)
           {
-                if (id != location.LocationsID) return NotFound();
-                if (ModelState.IsValid)
-                      {
-                try { _context.Update(location); await _context.SaveChangesAsync(); }
-                catch (DbUpdateConcurrencyException)
-                {
-                if (!LocationExists(location.LocationsID)) return NotFound();
-                else throw;
-                }
-                return RedirectToAction(nameof(Index));
-                }
-                return View(location);
+                  if (id != location.LocationsID) return NotFound();
+                  if (ModelState.IsValid)
+                  {
+                  try { _context.Update(location); await _context.SaveChangesAsync(); }
+                  catch (DbUpdateConcurrencyException)
+                  {
+                  if (!LocationExists(location.LocationsID)) return NotFound();
+                  else throw;
+                  }
+                  return RedirectToAction(nameof(Index));
+                  }
+                  return View(location);
           }
 
           [Authorize(Roles = "Admin")]
           public async Task<IActionResult> Delete(int? id)
           {
-               if (id == null) return NotFound();
-               var location = await _context.Locations.FirstOrDefaultAsync(m => m.LocationsID == id);
-               if (location == null) return NotFound();
-               return View(location);
+                  if (id == null) return NotFound();
+                  var location = await _context.Locations.FirstOrDefaultAsync(m => m.LocationsID == id);
+                  if (location == null) return NotFound();
+                  return View(location);
           }
 
          [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
          public async Task<IActionResult> DeleteConfirmed(int id)
          {
-               var location = await _context.Locations.FindAsync(id);
-               if (location != null) _context.Locations.Remove(location);
-               await _context.SaveChangesAsync();
-               return RedirectToAction(nameof(Index));
-         }
+                  var location = await _context.Locations.FindAsync(id);
+                  if (location != null) _context.Locations.Remove(location);
+                  await _context.SaveChangesAsync();
+                  return RedirectToAction(nameof(Index));
+        }
 
          private bool LocationExists(int id) =>
-              _context.Locations.Any(e => e.LocationsID == id);
+         _context.Locations.Any(e => e.LocationsID == id);
 
          [HttpGet]
          public JsonResult GetMatchingLocations(string term) =>
+            
+                  Json(_context.Locations.
+                  Where(l => l.LocationName.Contains(term)).
+                  Select(l => l.LocationName).Take(10).ToList());
               Json(_context.Locations
              .Where(l => l.LocationName.Contains(term))
              .Select(l => l.LocationName).Take(10).ToList());
       }
-}
+   }
