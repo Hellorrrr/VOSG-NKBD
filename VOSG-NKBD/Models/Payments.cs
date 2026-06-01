@@ -1,27 +1,36 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using VOSG_NKBD.Models;
+using VOSG_NKBD.Areas.Identity.Data;
 
 namespace VOSG_NKBD.Models
 {
-    public class Payments
+    public class Payment
     {
         [Key]
         public int PaymentID { get; set; }
 
-        [ForeignKey("MemberID"), Required]
-        public int MemberID { get; set; }
+        [Required]
+        public int ConfirmationID { get; set; }
 
         [Required]
+        public string VOSG_NKBDId { get; set; } = string.Empty;
+
+        [Required, Column(TypeName = "decimal(10,2)")]
+        [Display(Name = "Payment Amount")]
         public decimal PaymentAmount { get; set; }
 
-        [Required(ErrorMessage = "Enter your date")]
-        [DataType(DataType.Date)]
+        [Required, DataType(DataType.Date)]
+        [Display(Name = "Payment Date")]
         public DateTime PaymentDate { get; set; }
 
         [Required]
-        public string PaymentStatus { get; set; }
+        [Display(Name = "Status")]
+        public string PaymentStatus { get; set; } = "Paid";
 
-        public Payments? Payment { get; set; }
+        [ForeignKey("ConfirmationID")]
+        public Confirmation? Confirmation { get; set; }
+
+        [ForeignKey("VOSG_NKBDId")]
+        public VOSG_NKBDUser? User { get; set; }
     }
 }

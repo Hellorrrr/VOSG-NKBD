@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\SQL\" />
+    <Folder Include="Microsoft\Build\Evaluation\Context\" />
+    <Folder Include="Views\Activity\" />
   </ItemGroup>
 
 </Project>
