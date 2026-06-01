@@ -21,7 +21,7 @@ namespace VOSG_NKBD.Controllers
 
             if (!string.IsNullOrEmpty(search))
                 locations = locations.Where(l =>
-                    1`LocationName.Contains(search) ||
+                    l.LocationName.Contains(search) ||
                     l.City.Contains(search));
 
             if (!string.IsNullOrEmpty(city))

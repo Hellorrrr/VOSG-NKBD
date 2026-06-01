@@ -46,4 +46,4 @@ namespace VOSG_NKBD.Areas.Identity.Pages.Account
             return Page();
         }
     }
-}
+} 

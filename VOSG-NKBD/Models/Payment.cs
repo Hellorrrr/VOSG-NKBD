@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using VOSG_NKBD.Areas.Identity.Data;
 
 namespace VOSG_NKBD.Models
 {
