@@ -33,10 +33,11 @@
     <div class="row g-4">
         @foreach (var loc in featured)
         {
+            var imgSrc = loc.Places?.FirstOrDefault()?.ImageUrl ?? "/images/hall-auckland.jpg";
             <div class="col-sm-6 col-lg-4">
                 <div class="loc-card">
-                    <div class="loc-card-img-placeholder">
-                        <i class="bi bi-building"></i>
+                    <div class="loc-card-img">
+                        <img src="@imgSrc" alt="@loc.LocationName" />
                     </div>
                     <div class="loc-card-body">
                         <div class="loc-card-title">@loc.LocationName</div>
@@ -49,14 +50,14 @@
                         }
                         <div class="loc-card-footer">
                             <a asp-controller="Locations" asp-action="Details" asp-route-id="@loc.LocationsID"
-                                   class="btn btn-outline-primary btn-sm flex-fill">
+                               class="btn btn-outline-primary btn-sm flex-fill">
                                 <i class="bi bi-info-circle me-1"></i>View Details
                             </a>
                             @if (loc.Places?.Any() == true)
                             {
                                 <a asp-controller="Confirmations" asp-action="Book"
-                                       asp-route-id="@loc.Places!.First().PlaceID"
-                                       class="btn btn-primary btn-sm flex-fill">
+                                   asp-route-id="@loc.Places!.First().PlaceID"
+                                   class="btn btn-primary btn-sm flex-fill">
                                     <i class="bi bi-calendar-plus me-1"></i>Book
                                 </a>
                             }
@@ -84,17 +85,20 @@
             <div class="row g-4">
                 @foreach (var loc in Model)
                 {
+                    var imgSrc2 = loc.Places?.FirstOrDefault()?.ImageUrl ?? "/images/hall-auckland.jpg";
                     <div class="col-sm-6 col-lg-4">
                         <div class="loc-card">
-                            <div class="loc-card-img-placeholder">
-                                <i class="bi bi-building"></i>
+                            <div class="loc-card-img">
+                                <img src="@imgSrc2" alt="@loc.LocationName" />
                             </div>
                             <div class="loc-card-body">
                                 <div class="loc-card-title">@loc.LocationName</div>
                                 <div class="loc-card-sub"><i class="bi bi-geo-alt me-1"></i>@loc.City, @loc.Country</div>
                                 <div class="loc-card-footer mt-2">
                                     <a asp-controller="Locations" asp-action="Details" asp-route-id="@loc.LocationsID"
-                                       class="btn btn-outline-primary btn-sm flex-fill">View</a>
+                                       class="btn btn-outline-primary btn-sm flex-fill">
+                                        <i class="bi bi-info-circle me-1"></i>View Details
+                                    </a>
                                 </div>
                             </div>
                         </div>
